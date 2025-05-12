@@ -2,26 +2,25 @@
 // This is a client component because it uses hooks and needs to be rendered on the client side
 
 import {
-  UserGroupIcon,
   HomeIcon,
-  DocumentDuplicateIcon,
+  ChartPieIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx'; // Used for conditional class names - styling based on conditions
 
+// Map of links to display in the side navigation.
+// Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Home', href: '/spendings', icon: HomeIcon },
   {
-    name: 'Invoices',
-    href: '/dashboard/invoices',
-    icon: DocumentDuplicateIcon,
+    name: 'Statistics',
+    href: '/spendings/statistics',
+    icon: ChartPieIcon,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 ];
 
-export default function NavLinks() {
-
+export default function SpendingsNavLinks() {
   const pathname = usePathname();
   return (
     <>
