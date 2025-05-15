@@ -3,7 +3,7 @@ import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
-import fetchTransactions from '@/app/lib/spendings/data';
+import { fetchTransactions } from '@/app/lib/spendings/data';
 import { DeleteTransaction, UpdateTransaction } from './buttons';
 import TransactionType from './status';
 
@@ -15,8 +15,12 @@ export default async function SpendingsTable({
     currentPage: number;
 }) {
     // const invoices = await fetchFilteredInvoices(query, currentPage);
-
-    const transactions = await fetchTransactions();
+    console.log(`Query ${query}`)
+    console.log(`Current page ${currentPage}`)
+    const transactions = await fetchTransactions(
+        query = query,
+        currentPage = currentPage
+    );
     console.log(transactions);
     return (
         <div className='mt-6 flow-root'>
