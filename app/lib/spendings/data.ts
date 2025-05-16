@@ -23,6 +23,17 @@ export type Transaction = {
     type: TransactionType;
 };
 
+export type CreateTransactionDto = {
+    account: string;
+    category: SpendingCategory;
+    amount: number; // BigDecimal as a number
+    currency: string;
+    date: string; // LocalDate as an ISO string 
+    merchant: string;
+    details: string;
+    type: TransactionType;
+};
+
 export enum SpendingCategory {
     UNKNOWN = "UNKNOWN",
     EATING_OUT = "EATING_OUT",
@@ -67,4 +78,30 @@ export async function fetchTansactionPages(
     const data = await fetch(`http://localhost:8081/api/v1/transactions/pageable/by-query?query=${encodeURIComponent(query)}&page=0&pageSize=${pageSize}`);
     const transactions: TransactionPage = await data.json();
     return transactions.totalPages
+}
+
+export async function fetchTransactionCategories(): Promise<string[]> {
+
+    const data = await fetch(`http://localhost:8081/api/v1/transactions/categories`);
+
+    const categories: string[] = await data.json()
+    return categories
+
+}
+
+export async function createTransactionPost(transaction: CreateTransactionDto): Promise<Transaction> {
+    const response = await fetch(`http://localhost:8081/api/v1/transactions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transaction),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to create transaction: ${response.statusText}`);
+    }
+
+    const createdTransaction: Transaction = await response.json();
+    return createdTransaction;
 }

@@ -3,7 +3,7 @@ import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
-import { fetchTransactions } from '@/app/lib/spendings/data';
+import { fetchTransactions, fetchTransactionCategories } from '@/app/lib/spendings/data';
 import { DeleteTransaction, UpdateTransaction } from './buttons';
 import TransactionType from './status';
 
@@ -22,6 +22,10 @@ export default async function SpendingsTable({
         currentPage = currentPage
     );
     console.log(transactions);
+
+    const categories = await fetchTransactionCategories()
+    console.log(categories)
+
     return (
         <div className='mt-6 flow-root'>
             <div className="inline-block min-w-full align-middle">
@@ -64,15 +68,15 @@ export default async function SpendingsTable({
                                 <th scope="col" className="px-3 py-4 font-medium">
                                     Category
                                 </th>
-                                <th scope="col" className="px-3 py-4 font-medium">
+                                {/* <th scope="col" className="px-3 py-4 font-medium">
                                     Details
-                                </th>
+                                </th> */}
                                 <th scope="col" className="px-3 py-4 font-medium">
                                     Type
                                 </th>
-                                <th scope="col" className="relative py-3 pl-6 pr-3">
+                                {/* <th scope="col" className="relative py-3 pl-6 pr-3">
                                     <span className="sr-only">Edit</span>
-                                </th>
+                                </th> */}
                             </tr>
                         </thead>
                         <tbody className="bg-white">
@@ -97,20 +101,29 @@ export default async function SpendingsTable({
                                         {transaction.merchant}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-2">
-                                        {transaction.category}
+                                        <select
+                                            defaultValue={transaction.category}
+                                            className="whitespace-nowrap text-sm px-3 py-2"
+                                        >
+                                            {categories.map((category) => (
+                                                <option key={category} value={category}>
+                                                    {category}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </td>
-                                    <td className="whitespace-nowrap px-3 py-2">
+                                    {/* <td className="whitespace-nowrap px-3 py-2">
                                         {transaction.details}
-                                    </td>
+                                    </td> */}
                                     <td className="whitespace-nowrap px-3 py-2">
                                         <TransactionType type={transaction.type} />
                                     </td>
-                                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                                        <div className="flex justify-end gap-3">
-                                            <UpdateTransaction id={transaction.id} />
-                                            <DeleteTransaction id={transaction.id} />
-                                        </div>
-                                    </td>
+                                    {/* <td className="whitespace-nowrap py-3 pl-6 pr-3"> */}
+                                    {/* <div className="flex justify-end gap-3"> */}
+                                    {/* <UpdateTransaction id={transaction.id} /> */}
+                                    {/* <DeleteTransaction id={transaction.id} /> */}
+                                    {/* </div> */}
+                                    {/* </td> */}
                                 </tr>
                             ))}
                         </tbody>
