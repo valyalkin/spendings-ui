@@ -1,6 +1,7 @@
 // import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
+import bcrypt from 'bcryptjs';
 
 // const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 const sql = postgres('postgres://postgres:example@localhost:5432/postgres', { ssl: false });
@@ -19,8 +20,8 @@ async function seedUsers() {
 
   const insertedUsers = await Promise.all(
     users.map(async (user) => {
-      // const hashedPassword = await bcrypt.hash(user.password, 10);
-      const hashedPassword = user.password;
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      // const hashedPassword = user.password;
       return sql`
         INSERT INTO users (id, name, email, password)
         VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
