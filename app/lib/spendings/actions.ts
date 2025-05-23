@@ -4,7 +4,7 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { CreateTransactionDto, SpendingCategory, TransactionType, createTransactionPost } from './data';
+import { CreateTransactionDto, createTransactionPost } from './data';
 
 // const sql = postgres('postgres://postgres:example@localhost:5432/postgres', { ssl: false });
 
@@ -61,13 +61,13 @@ export async function createTransaction(formData: FormData) {
 
     const newTransaction: CreateTransactionDto = {
         account: account,
-        category: SpendingCategory[category as keyof typeof SpendingCategory],
+        category: category,
         amount: amount,
         currency: currency,
         date: date,
         merchant: merchant,
         details: "",
-        type: TransactionType[type as keyof typeof TransactionType],
+        type: type,
     };
 
 

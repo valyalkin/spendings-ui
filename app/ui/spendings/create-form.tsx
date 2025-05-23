@@ -9,28 +9,19 @@ import {
 import { Button } from '@/app/ui/button';
 import { createTransaction } from '@/app/lib/spendings/actions';
 import { randomUUID } from 'crypto';
-import { SpendingCategory } from '@/app/lib/spendings/data';
+import { fetchReferenceData } from '@/app/lib/spendings/data';
+import { TransactionReferenceDto } from '@/app/lib/spendings/data';
 
-export default function Form({ customers }: { customers: CustomerField[] }) {
+export default function Form({ customers, referenceData }: { customers: CustomerField[], referenceData: TransactionReferenceDto }) {
 
 
-  const accounts = [
-    "DBS",
-    "SC",
-    "CITI"
-  ]
+  const accounts = referenceData.accounts
 
-  const currencies = [
-    "SGD",
-    "USD"
-  ]
+  const currencies = referenceData.currencies
 
-  const categories = Object.values(SpendingCategory);
+  const categories = referenceData.spendingCategories
 
-  const types = [
-    "EXPENSE",
-    "INCOME"
-  ]
+  const types = referenceData.transactionTypes
 
   return (
     <form action={createTransaction}>

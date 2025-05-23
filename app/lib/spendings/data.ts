@@ -14,48 +14,31 @@ export type Pageable = {
 export type Transaction = {
     id: string; // UUID as a string
     account: string;
-    category: SpendingCategory;
+    category: string;
     amount: number; // BigDecimal as a number
     currency: string;
     date: string; // LocalDate as an ISO string 
     merchant: string;
     details: string;
-    type: TransactionType;
+    type: string;
 };
 
 export type CreateTransactionDto = {
     account: string;
-    category: SpendingCategory;
+    category: string;
     amount: number; // BigDecimal as a number
     currency: string;
     date: string; // LocalDate as an ISO string 
     merchant: string;
     details: string;
-    type: TransactionType;
+    type: string;
 };
 
-export enum SpendingCategory {
-    UNKNOWN = "UNKNOWN",
-    EATING_OUT = "EATING_OUT",
-    SOCIAL_LIFE = "SOCIAL_LIFE",
-    PETS = "PETS",
-    TRANSPORT_PUBLIC = "TRANSPORT_PUBLIC",
-    TRANSPORT_TAXI = "TRANSPORT_TAXI",
-    TRANSPORT_VEHICLE = "TRANSPORT_VEHICLE",
-    APPAREL = "APPAREL",
-    HEALTH = "HEALTH",
-    EDUCATION = "EDUCATION",
-    GROCERIES = "GROCERIES",
-    HOUSEHOLD = "HOUSEHOLD",
-    BILLS = "BILLS",
-    SPORT = "SPORT",
-    TRAVEL = "TRAVEL",
-    OTHER = "OTHER",
-}
-
-export enum TransactionType {
-    INCOME = "INCOME",
-    EXPENSE = "EXPENSE",
+export type TransactionReferenceDto = {
+    spendingCategories: string[],
+    transactionTypes: string[],
+    currencies: string[],
+    accounts: string[]
 }
 
 export async function fetchTransactions(
@@ -82,11 +65,21 @@ export async function fetchTansactionPages(
 
 export async function fetchTransactionCategories(): Promise<string[]> {
 
-    const data = await fetch(`http://localhost:8081/api/v1/transactions/categories`);
+    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`);
 
-    const categories: string[] = await data.json()
+    const reference: TransactionReferenceDto = await data.json()
+
+    const categories: string[] = reference.spendingCategories
     return categories
 
+}
+
+export async function fetchReferenceData(): Promise<TransactionReferenceDto> {
+    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`);
+
+    const reference: TransactionReferenceDto = await data.json()
+
+    return reference
 }
 
 export async function createTransactionPost(transaction: CreateTransactionDto): Promise<Transaction> {
