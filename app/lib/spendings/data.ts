@@ -47,7 +47,11 @@ export async function fetchTransactions(
     pageSize: number = 10
 ): Promise<Transaction[]> {
     page = page - 1 // In backend, pagination starts with 0
-    const data = await fetch(`http://localhost:8081/api/v1/transactions/pageable/by-query?query=${encodeURIComponent(query)}&page=${page}&pageSize=${pageSize}`);
+    const data = await fetch(`http://localhost:8081/api/v1/transactions/pageable/by-query?query=${encodeURIComponent(query)}&page=${page}&pageSize=${pageSize}`, {
+        headers: {
+            'X-API-KEY': process.env.API_KEY || ''
+        }
+    });
     console.log(data.status)
     const transactions: TransactionPage = await data.json();
     return transactions.content;
@@ -58,14 +62,22 @@ export async function fetchTansactionPages(
     pageSize: number = 10,
 ): Promise<number> {
 
-    const data = await fetch(`http://localhost:8081/api/v1/transactions/pageable/by-query?query=${encodeURIComponent(query)}&page=0&pageSize=${pageSize}`);
+    const data = await fetch(`http://localhost:8081/api/v1/transactions/pageable/by-query?query=${encodeURIComponent(query)}&page=0&pageSize=${pageSize}`, {
+        headers: {
+            'X-API-KEY': process.env.API_KEY || ''
+        }
+    });
     const transactions: TransactionPage = await data.json();
     return transactions.totalPages
 }
 
 export async function fetchTransactionCategories(): Promise<string[]> {
 
-    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`);
+    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`, {
+        headers: {
+            'X-API-KEY': process.env.API_KEY || ''
+        }
+    });
 
     const reference: TransactionReferenceDto = await data.json()
 
@@ -75,7 +87,11 @@ export async function fetchTransactionCategories(): Promise<string[]> {
 }
 
 export async function fetchReferenceData(): Promise<TransactionReferenceDto> {
-    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`);
+    const data = await fetch(`http://localhost:8081/api/references/v1/transactions`, {
+        headers: {
+            'X-API-KEY': process.env.API_KEY || ''
+        }
+    });
 
     const reference: TransactionReferenceDto = await data.json()
 
@@ -87,6 +103,7 @@ export async function createTransactionPost(transaction: CreateTransactionDto): 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-API-KEY': process.env.API_KEY || ''
         },
         body: JSON.stringify(transaction),
     });
